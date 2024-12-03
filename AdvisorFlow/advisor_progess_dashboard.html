@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnZilla Student Progress Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Temple University colors */
+        :root {
+            --temple-red: #990000;
+            --temple-white: #FFFFFF;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--temple-white);
+            color: black;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .navbar, .footer {
+            background-color: var(--temple-red);
+        }
+
+        .navbar-brand, .dropdown-toggle {
+            color: var(--temple-white) !important;
+        }
+        .nav-link {
+            color: var(--temple-white) !important;
+        }
+
+        .footer {
+            color: var(--temple-white);
+            text-align: center;
+            padding: 10px 0;
+            margin-top: auto;
+        }
+
+        .btn-temple {
+            background-color: var(--temple-red);
+            color: var(--temple-white);
+            border: none;
+        }
+
+        .btn-temple:hover {
+            background-color: #660000;
+        }
+
+        .profile-pic {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 5px;
+        }
+
+        .dashboard-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-y: auto;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .search-container .form-control {
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+        }
+
+        .search-container .btn-temple {
+            flex-shrink: 0;
+        }
+
+        .generate-report-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .table {
+            border: 1px solid var(--temple-red);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">LearnZilla</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto ms-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../AdvisorFlow/advisor_dashboard.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../AdvisorFlow/advisor_chat.html">New Chat</a>
+                    </li>
+                </ul>
+                <!-- User Dropdown with Profile Picture -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown d-flex align-items-center">
+                        <img src="https://via.placeholder.com/30" alt="Profile Picture" class="profile-pic">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            User
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="../index.html">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <div class="mt-4 search-container">
+            <input type="text" id="tuidInput" class="form-control" placeholder="Enter TUID to lookup student">
+            <button class="btn btn-temple" onclick="lookupStudent()">Lookup</button>
+        </div>
+        <div class="generate-report-container">
+            <button class="btn btn-temple" onclick="generateReport()">Generate Report</button>
+        </div>
+        <div class="table-container">
+            <table class="table table-striped table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">TUID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Major</th>
+                        <th scope="col">GPA</th>
+                        <th scope="col">Credits Earned</th>
+                        <th scope="col">Graduation Status</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTableBody">
+                    <!-- Example Student Row -->
+                    <tr>
+                        <td>123456</td>
+                        <td>John Doe</td>
+                        <td>Computer Science</td>
+                        <td>3.8</td>
+                        <td>90</td>
+                        <td>On Track</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h5 class="mt-4">Courses Enrolled</h5>
+            <table class="table table-striped table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Course Code</th>
+                        <th scope="col">Course Name</th>
+                        <th scope="col">Credits</th>
+                        <th scope="col">Instructor</th>
+                        <th scope="col">Progress</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CS101</td>
+                        <td>Introduction to Programming</td>
+                        <td>3</td>
+                        <td>Dr. Smith</td>
+                        <td>85%</td>
+                    </tr>
+                    <tr>
+                        <td>CS201</td>
+                        <td>Data Structures</td>
+                        <td>3</td>
+                        <td>Prof. Johnson</td>
+                        <td>78%</td>
+                    </tr>
+                    <tr>
+                        <td>CS301</td>
+                        <td>Software Engineering</td>
+                        <td>3</td>
+                        <td>Dr. Lee</td>
+                        <td>92%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 LearnZilla. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function lookupStudent() {
+            const tuid = document.getElementById('tuidInput').value;
+            // Dummy data for illustration purposes
+            const students = {
+                '123456': { name: 'John Doe', major: 'Computer Science', gpa: '3.8', credits: 90, graduation: 'On Track', courses: [
+                    { code: 'CS101', name: 'Introduction to Programming', credits: 3, instructor: 'Dr. Smith', progress: '85%' },
+                    { code: 'CS201', name: 'Data Structures', credits: 3, instructor: 'Prof. Johnson', progress: '78%' },
+                    { code: 'CS301', name: 'Software Engineering', credits: 3, instructor: 'Dr. Lee', progress: '92%' }
+                ] },
+                '654321': { name: 'Jane Smith', major: 'Biology', gpa: '3.6', credits: 85, graduation: 'On Track', courses: [
+                    { code: 'BIO101', name: 'General Biology', credits: 4, instructor: 'Dr. Green', progress: '88%' },
+                    { code: 'CHEM101', name: 'Organic Chemistry', credits: 3, instructor: 'Dr. White', progress: '72%' }
+                ] },
+                '112233': { name: 'Alice Johnson', major: 'History', gpa: '3.5', credits: 100, graduation: 'On Track', courses: [
+                    { code: 'HIST201', name: 'World History', credits: 3, instructor: 'Dr. Brown', progress: '91%' },
+                    { code: 'HIST301', name: 'Modern History', credits: 3, instructor: 'Prof. Black', progress: '85%' }
+                ] }
+            };
+
+            const student = students[tuid];
+
+            if (student) {
+                const tbody = document.getElementById('studentTableBody');
+                tbody.innerHTML = `
+                    <tr>
+                        <td>${tuid}</td>
+                        <td>${student.name}</td>
+                        <td>${student.major}</td>
+                        <td>${student.gpa}</td>
+                        <td>${student.credits}</td>
+                        <td>${student.graduation}</td>
+                    </tr>
+                `;
+
+                const coursesTableBody = document.querySelector('.table-container tbody:last-of-type');
+                coursesTableBody.innerHTML = student.courses.map(course => `
+                    <tr>
+                        <td>${course.code}</td>
+                        <td>${course.name}</td>
+                        <td>${course.credits}</td>
+                        <td>${course.instructor}</td>
+                        <td>${course.progress}</td>
+                    </tr>
+                `).join('');
+            } else {
+                alert('Student not found!');
+            }
+        }
+    </script>
+<script>
+        function generateReport() {
+            const studentInfo = document.getElementById('studentTableBody').innerHTML;
+            const coursesInfo = document.querySelector('.table-container tbody:last-of-type').innerHTML;
+            if (studentInfo && coursesInfo) {
+                let reportWindow = window.open('', '_blank');
+                reportWindow.document.write('<html><head><title>Student Report</title></head><body>');
+                reportWindow.document.write('<h1>Student Progress Report</h1>');
+                reportWindow.document.write('<h2>Student Information</h2>');
+                reportWindow.document.write('<table border="1" style="width: 100%; margin-bottom: 20px;">' + studentInfo + '</table>');
+                reportWindow.document.write('<h2>Courses Enrolled</h2>');
+                reportWindow.document.write('<table border="1" style="width: 100%;">' + coursesInfo + '</table>');
+                reportWindow.document.write('</body></html>');
+                reportWindow.document.close();
+            } else {
+                alert('Please lookup a student first to generate the report.');
+            }
+        }
+    </script>
+</body> 
+
+</html>
