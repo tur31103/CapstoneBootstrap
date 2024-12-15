@@ -5,11 +5,10 @@
     <link rel="stylesheet" href="../common.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LearnZilla Feedback</title>
+    <title>LearnZilla Faculty Chat</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Temple University colors */
         :root {
             --temple-red: #990000;
             --temple-white: #FFFFFF;
@@ -36,6 +35,7 @@
         .navbar-brand, .dropdown-toggle {
             color: var(--temple-white) !important;
         }
+
         .nav-link {
             color: var(--temple-white) !important;
         }
@@ -67,7 +67,7 @@
         .main-container {
             display: flex;
             flex: 1;
-            height: calc(100vh - 56px - 40px); /* Full height minus navbar and footer */
+            height: calc(100vh - 56px - 40px);
             overflow: hidden;
         }
 
@@ -90,7 +90,7 @@
             background-color: #d4d4d4;
         }
 
-        .feedback-container {
+        .chat-container {
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -99,33 +99,59 @@
             overflow: hidden;
         }
 
-        .course-details {
+        .chat-box {
             width: 100%;
-            max-width: 800px;
-            margin-bottom: 20px;
-            padding: 20px;
-            background-color: #f9f9f9;
+            height: 100%;
             border: 1px solid var(--temple-red);
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .feedback-form {
-            width: 100%;
-            max-width: 800px;
-            background-color: #f9f9f9;
+            overflow-y: auto;
             padding: 20px;
-            border: 1px solid var(--temple-red);
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
         }
 
-        .form-group {
+        .message {
             margin-bottom: 15px;
         }
 
-        label {
-            font-weight: bold;
+        .message.user {
+            text-align: right;
+        }
+
+        .message.bot {
+            text-align: left;
+        }
+
+        .message .content {
+            display: inline-block;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+        }
+
+        .message.user .content {
+            background-color: var(--temple-red);
+            color: var(--temple-white);
+        }
+
+        .input-container {
+            display: flex;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .input-container input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--temple-red);
+            border-radius: 5px 0 0 5px;
+        }
+
+        .input-container button {
+            padding: 10px;
+            background-color: var(--temple-red);
+            color: var(--temple-white);
+            border: none;
+            border-radius: 0 5px 5px 0;
         }
     </style>
 </head>
@@ -141,79 +167,78 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto ms-3">
                     <li class="nav-item">
-                        <a class="nav-link" href="../StudentFlow/student_dashboard.html">Home</a>
+                        <a class="nav-link" href="../FacultyFlow/faculty_dashboard.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../StudentFlow/student_chat.html">New Chat</a>
+                        <a class="nav-link" href="../FacultyFlow/faculty_chat.html">New Faculty Chat</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../StudentFlow/student_feedback.html">Give Feedback</a>
+                        <a class="nav-link" href="../FacultyFlow/faculty_progess_dashboard.html">Student Progress Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../FacultyFlow/faculty_feedback_dashboard.html">Student Feedback Dashboard</a>
                     </li>
                 </ul>
-                <!-- User Dropdown with Profile Picture -->
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown d-flex align-items-center">
                         <img src="https://via.placeholder.com/30" alt="Profile Picture" class="profile-pic">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            User
+                            Professor
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="#">Profile</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="../index.html">Logout</a></li>
+                            <li><a class="dropdown-item" href="#">Logout</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            showCourseFeedback('Introduction to Computer Science');
-        });
-    </script>
+
+    <!-- Main Container -->
     <div class="main-container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <h4>Your Courses</h4>
+            <h4>Chat History</h4>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showCourseFeedback('Introduction to Computer Science')">Introduction to Computer Science</a>
+                    <a class="nav-link" href="#">Student Advising Records</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showCourseFeedback('Data Structures')">Data Structures</a>
+                    <a class="nav-link" href="#">Research Project Updates</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showCourseFeedback('Web Development')">Web Development</a>
+                    <a class="nav-link" href="#">Course Development Notes</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="showCourseFeedback('Database Systems')">Database Systems</a>
+                    <a class="nav-link" href="#">Departmental Announcements</a>
                 </li>
             </ul>
         </div>
 
-        <!-- Feedback Container -->
-        <div class="feedback-container">
-            <div id="course-details" class="course-details" style="display: none;"></div>
-            <div id="feedback-form" class="feedback-form" style="display: none;">
-                <h4 class="text-center">Course Feedback</h4>
-                <form>
-                    <div class="form-group">
-                        <label for="rating">Rating</label>
-                        <select class="form-control" id="rating">
-                            <option>1 - Poor</option>
-                            <option>2 - Fair</option>
-                            <option>3 - Good</option>
-                            <option>4 - Very Good</option>
-                            <option>5 - Excellent</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="feedback">Your Feedback</label>
-                        <textarea class="form-control" id="feedback" rows="4" placeholder="Enter your feedback here..."></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-temple w-100">Submit Feedback</button>
-                </form>
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <div class="chat-box">
+                <div class="message bot">
+                    <div class="content">Hello, Professor! How can I assist you today?</div>
+                </div>
+                <div class="message user">
+                    <div class="content">Can you help me prepare an outline for next week’s lecture on AI ethics?</div>
+                </div>
+                <div class="message bot">
+                    <div class="content">Certainly! An outline could include: Introduction to AI ethics, key challenges, and case studies. Would you like to include any specific examples?</div>
+                </div>
+                <div class="message user">
+                    <div class="content">Yes, include the Cambridge Analytica case.</div>
+                </div>
+                <div class="message bot">
+                    <div class="content">Got it! I'll add that to the outline as a discussion point. Anything else to include?</div>
+                </div>
+            </div>
+            <div class="input-container">
+                <input type="text" placeholder="Type your message here...">
+                <button class="btn-temple">Send</button>
             </div>
         </div>
     </div>
@@ -227,21 +252,6 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function showCourseFeedback(courseName) {
-            const courseDetails = document.getElementById('course-details');
-            const feedbackForm = document.getElementById('feedback-form');
-            
-            courseDetails.style.display = 'block';
-            feedbackForm.style.display = 'block';
-            
-            courseDetails.innerHTML = `
-                <h4>${courseName}</h4>
-                <p><strong>Instructor:</strong> John Doe</p>
-                <p><strong>Description:</strong> This course provides an in-depth introduction to ${courseName} covering fundamental concepts and practical applications.</p>
-            `;
-        }
-    </script>
 </body>
 
 </html>

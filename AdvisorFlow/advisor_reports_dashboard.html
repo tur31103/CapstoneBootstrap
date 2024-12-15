@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="../common.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advisor Manage Course Plans</title>
@@ -92,19 +93,6 @@
         .table {
             border: 1px solid var(--temple-red);
         }
-
-        .details-container {
-            width: 100%;
-            margin-top: 20px;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-        }
-
-        .details-container.hidden {
-            display: none;
-        }
     </style>
 </head>
 
@@ -122,7 +110,13 @@
                         <a class="nav-link" href="../AdvisorFlow/advisor_dashboard.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../AdvisorFlow/advisor_chat.html">New Chat</a>
+                        <a class="nav-link" href="../AdvisorFlow/advisor_progess_dashboard.html">View Student Progress</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../AdvisorFlow/advisor_reports_dashboard.html">View Student Plans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../AdvisorFlow/advisor_chat.html">New Advisor Chat</a>
                     </li>
                 </ul>
                 <!-- User Dropdown with Profile Picture -->
@@ -188,21 +182,31 @@
                 </tbody>
             </table>
         </div>
-        <!-- Course Plan Details Container -->
-        <div id="coursePlanDetails" class="details-container hidden">
-            <h3>Course Plan Details</h3>
-            <p><strong>TUID:</strong> <span id="detailsTUID"></span></p>
-            <p><strong>Name:</strong> <span id="detailsName"></span></p>
-            <p><strong>Major:</strong> <span id="detailsMajor"></span></p>
-            <p><strong>Course Plan Status:</strong> <span id="detailsStatus"></span></p>
-            <p><strong>Report Date:</strong> <span id="detailsDate"></span></p>
-            <p><strong>Advisor Comments:</strong> <span id="detailsComments"></span></p>
-            <p><strong>Courses for the Semester:</strong></p>
-            <ul id="detailsCourses"></ul>
-            <div class="mt-4">
-                <button class="btn btn-success me-2" onclick="acceptCoursePlan()">Accept Course Plan</button>
-                <button class="btn btn-danger me-2" onclick="denyCoursePlan()">Deny Course Plan</button>
-                <button class="btn btn-secondary" onclick="hideCoursePlanDetails()">Close</button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="coursePlanModal" tabindex="-1" aria-labelledby="coursePlanModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="coursePlanModalLabel">Course Plan Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>TUID:</strong> <span id="modalTUID"></span></p>
+                    <p><strong>Name:</strong> <span id="modalName"></span></p>
+                    <p><strong>Major:</strong> <span id="modalMajor"></span></p>
+                    <p><strong>Course Plan Status:</strong> <span id="modalStatus"></span></p>
+                    <p><strong>Report Date:</strong> <span id="modalDate"></span></p>
+                    <p><strong>Advisor Comments:</strong> <span id="modalComments"></span></p>
+                    <p><strong>Courses for the Semester:</strong></p>
+                    <ul id="modalCourses"></ul>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success me-2" onclick="acceptCoursePlan()">Accept Course Plan</button>
+                    <button class="btn btn-danger me-2" onclick="denyCoursePlan()">Deny Course Plan</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
@@ -217,47 +221,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Add filter functionality
-        document.querySelectorAll('.filter-input').forEach(input => {
-            input.addEventListener('input', function () {
-                const filterColumnIndex = Array.from(input.parentElement.parentElement.children).indexOf(input.parentElement);
-                const filterValue = input.value.toLowerCase();
-                const rows = document.querySelectorAll('#reportTableBody tr');
-
-                rows.forEach(row => {
-                    const cell = row.children[filterColumnIndex];
-                    if (cell.textContent.toLowerCase().includes(filterValue)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            });
-        });
-
-        // Generate Full Report
-        function generateFullReport() {
-            const reportTableBody = document.getElementById('reportTableBody').innerHTML;
-            if (reportTableBody) {
-                let reportWindow = window.open('', '_blank');
-                reportWindow.document.write('<html><head><title>Full Course Report</title></head><body>');
-                reportWindow.document.write('<h1>Full Course Report</h1>');
-                reportWindow.document.write('<table border="1" style="width: 100%; margin-bottom: 20px;">');
-                reportWindow.document.write('<thead><tr>');
-                document.querySelectorAll('.table thead th').forEach(th => {
-                    reportWindow.document.write(`<th>${th.textContent.split('<br')[0]}</th>`);
-                });
-                reportWindow.document.write('</tr></thead>');
-                reportWindow.document.write('<tbody>' + reportTableBody + '</tbody>');
-                reportWindow.document.write('</table>');
-                reportWindow.document.write('</body></html>');
-                reportWindow.document.close();
-            } else {
-                alert('No data available to generate the report.');
-            }
-        }
-
-        // Show Course Plan Details
+        // Show Course Plan Modal
         function showCoursePlanDetails(tuid) {
             const studentData = {
                 '123456': {
@@ -267,7 +231,7 @@
                     status: 'Approved',
                     reportDate: '2024-12-01',
                     comments: 'Course plan is well aligned with graduation requirements.',
-                    courses: ['CS 101 - Introduction to Programming', 'CS 201 - Data Structures', 'MATH 221 - Calculus II']
+                    courses: ['CS 101 - Intro to Programming', 'CS 201 - Data Structures', 'MATH 221 - Calculus II']
                 },
                 '654321': {
                     tuid: '654321',
@@ -276,7 +240,7 @@
                     status: 'Pending',
                     reportDate: '2024-11-28',
                     comments: 'Needs review of elective courses.',
-                    courses: ['BIO 101 - General Biology', 'CHEM 101 - General Chemistry', 'MATH 101 - College Algebra']
+                    courses: ['BIO 101 - General Biology', 'CHEM 101 - Chemistry I', 'MATH 101 - Algebra']
                 },
                 '112233': {
                     tuid: '112233',
@@ -285,19 +249,20 @@
                     status: 'Approved',
                     reportDate: '2024-12-02',
                     comments: 'Excellent plan, ready for next semester.',
-                    courses: ['HIST 101 - World History', 'HIST 202 - Modern European History', 'PHIL 101 - Introduction to Philosophy']
+                    courses: ['HIST 101 - World History', 'HIST 202 - Modern Europe', 'PHIL 101 - Intro to Philosophy']
                 }
             };
+
             const student = studentData[tuid];
             if (student) {
-                document.getElementById('detailsTUID').textContent = student.tuid;
-                document.getElementById('detailsName').textContent = student.name;
-                document.getElementById('detailsMajor').textContent = student.major;
-                document.getElementById('detailsStatus').textContent = student.status;
-                document.getElementById('detailsDate').textContent = student.reportDate;
-                document.getElementById('detailsComments').textContent = student.comments;
+                document.getElementById('modalTUID').textContent = student.tuid;
+                document.getElementById('modalName').textContent = student.name;
+                document.getElementById('modalMajor').textContent = student.major;
+                document.getElementById('modalStatus').textContent = student.status;
+                document.getElementById('modalDate').textContent = student.reportDate;
+                document.getElementById('modalComments').textContent = student.comments;
 
-                const coursesList = document.getElementById('detailsCourses');
+                const coursesList = document.getElementById('modalCourses');
                 coursesList.innerHTML = '';
                 student.courses.forEach(course => {
                     const li = document.createElement('li');
@@ -305,7 +270,8 @@
                     coursesList.appendChild(li);
                 });
 
-                document.getElementById('coursePlanDetails').classList.remove('hidden');
+                const modal = new bootstrap.Modal(document.getElementById('coursePlanModal'));
+                modal.show();
             } else {
                 alert('No details available for this student.');
             }
@@ -313,17 +279,12 @@
 
         // Accept Course Plan
         function acceptCoursePlan() {
-            alert('Course plan has been accepted.');
+            alert('Course plan accepted.');
         }
 
         // Deny Course Plan
         function denyCoursePlan() {
-            alert('Course plan has been denied.');
-        }
-
-        // Hide Course Plan Details
-        function hideCoursePlanDetails() {
-            document.getElementById('coursePlanDetails').classList.add('hidden');
+            alert('Course plan denied.');
         }
     </script>
 </body>

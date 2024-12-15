@@ -2,9 +2,10 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" href="../common.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LearnZilla Chat</title>
+    <title>LearnZilla Advisor Chat</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -169,7 +170,13 @@
                         <a class="nav-link" href="../AdvisorFlow/advisor_dashboard.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../AdvisorFlow/advisor_chat.html">New Chat</a>
+                        <a class="nav-link" href="../AdvisorFlow/advisor_progess_dashboard.html">View Student Progress</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../AdvisorFlow/advisor_reports_dashboard.html">View Student Plans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../AdvisorFlow/advisor_chat.html">New Advisor Chat</a>
                     </li>
                 </ul>
                 <!-- User Dropdown with Profile Picture -->
@@ -177,7 +184,7 @@
                     <li class="nav-item dropdown d-flex align-items-center">
                         <img src="https://via.placeholder.com/30" alt="Profile Picture" class="profile-pic">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            User
+                            Advisor
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -194,19 +201,19 @@
     <div class="main-container">
         <!-- Sidebar -->
         <div class="sidebar">
-            <h4>LearnZilla History</h4>
+            <h4>Chat History</h4>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Course Enrollment Guidance</a>
+                    <a class="nav-link" href="#">Student Records</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Major Selection Discussion</a>
+                    <a class="nav-link" href="#">Course Planning</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Academic Improvement Plan</a>
+                    <a class="nav-link" href="#">Graduation Requirements</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Graduation Requirements Review</a>
+                    <a class="nav-link" href="#">Major Change Requests</a>
                 </li>
             </ul>
         </div>
@@ -215,19 +222,10 @@
         <div class="chat-container">
             <div class="chat-box">
                 <div class="message bot">
-                    <div class="content">Hello! How can I assist you with your academic planning today?</div>
+                    <div class="content">Hello, how can I assist you today?</div>
                 </div>
                 <div class="message user">
-                    <div class="content">I need some advice on which courses to take next semester for my Computer Science major.</div>
-                </div>
-                <div class="message bot">
-                    <div class="content">Sure! Could you let me know if you have any specific areas of interest, like AI, software development, or cybersecurity?</div>
-                </div>
-                <div class="message user">
-                    <div class="content">I'm really interested in software development. I'd like to focus on that.</div>
-                </div>
-                <div class="message bot">
-                    <div class="content">Great! I recommend taking "Advanced Programming Techniques" and "Software Engineering." These courses will help you build a strong foundation in software development.</div>
+                    <div class="content">What are the requirements for an IS&T Student to graduate?</div>
                 </div>
             </div>
             <div class="input-container">
